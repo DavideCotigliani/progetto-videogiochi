@@ -1,13 +1,12 @@
 @extends('layouts.videogames') 
 @section('title', 'Tutti i videogiochi')
-
 @section('content')
    <table class="table table-bordered">
   <thead>
     <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Release year</th>
-      <th scope="col">Language</th>
+      <th scope="col">Titolo</th>
+      <th scope="col">Pubblicazione</th>
+      <th scope="col">Lingua</th>
     </tr>
   </thead>
   <tbody>
@@ -16,6 +15,7 @@
             <td>{{$videogame->name}}</td>
             <td>{{$videogame->release_year}}</td>
             <td>{{$videogame->language}}</td>
+            <td><a href="{{route("videogames.show", $videogame->id)}}">Vai al dettaglio</a></td>
         </tr>
     @endforeach
   </tbody>
