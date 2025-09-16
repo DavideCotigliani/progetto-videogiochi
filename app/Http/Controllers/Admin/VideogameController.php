@@ -22,7 +22,7 @@ class VideogameController extends Controller
      */
     public function create()
     {
-        //
+        return view('videogames.create');
     }
 
     /**
@@ -30,7 +30,18 @@ class VideogameController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $newVideogame = new Videogame();
+        $newVideogame->name = $data['name'];
+        $newVideogame->release_year = $data['release_year'];
+        $newVideogame->language = $data['language'];
+
+        $newVideogame->description = $data['description'];
+
+        $newVideogame->save();
+
+        return redirect()->route("videogames.show", $newVideogame);
+
     }
 
     /**
@@ -44,24 +55,34 @@ class VideogameController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Videogame $videogame)
     {
-        //
+        return view("videogames.edit", compact("videogame"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Videogame $videogame)
     {
-        //
+        $data = $request->all();
+        $videogame->name = $data['name'];
+        $videogame->release_year = $data['release_year'];
+        $videogame->language = $data['language'];
+
+        $videogame->description = $data['description'];
+
+        $videogame->update();
+        return redirect()->route("videogames.show", $videogame);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Videogame $videogame)
     {
-        //
+        $videogame->delete();
+        return redirect()->route("videogames.index");
     }
 }
