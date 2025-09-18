@@ -2,8 +2,14 @@
 @section('title', 'Singolo videogioco')
 
 @section('content')
+
 <div class="card" style="width: 18rem;">
-  <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+         @if ($videogame->image)
+<div id="videogame-image">
+  <img class="card-img-top" src="{{asset("storage/" . $videogame->image)}}" alt="copertina">
+</div> 
+@endif
+
   <div class="card-body">
     <h4 class="card-title">{{$videogame->name}}</h4>
     <h5 class="card-title">{{$videogame->release_year}}</h5>

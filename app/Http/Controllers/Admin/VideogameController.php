@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Videogame;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VideogameController extends Controller
 {
@@ -38,6 +39,12 @@ class VideogameController extends Controller
 
         $newVideogame->description = $data['description'];
 
+        if (array_key_exists("image", $data)) {
+
+            $img_url = Storage::putFile("videogames", $data['image']);
+        }
+        $newVideogame->image = $img_url;
+
         $newVideogame->save();
 
         return redirect()->route("videogames.show", $newVideogame);
@@ -49,6 +56,7 @@ class VideogameController extends Controller
      */
     public function show(Videogame $videogame)
     {
+
         return view("videogames.show", compact("videogame"));
     }
 
@@ -72,6 +80,20 @@ class VideogameController extends Controller
 
         $videogame->description = $data['description'];
 
+
+        // Carico l'immagine solo se presente
+        if ($request->hasFile('image')) {
+            // se c'è già un'immagine, eliminiamola
+            if ($videogame->image) {
+                Storage::delete($videogame->image);
+            }
+
+            // salva la nuova immagine sul disco "public"
+            $img_url = $request->file('image')->store('books', 'public');
+            $videogame->image = $img_url;
+        }
+
+
         $videogame->update();
         return redirect()->route("videogames.show", $videogame);
 
@@ -82,6 +104,9 @@ class VideogameController extends Controller
      */
     public function destroy(Videogame $videogame)
     {
+        if ($videogame->image) {
+            Storage::delete($videogame->image);
+        }
         $videogame->delete();
         return redirect()->route("videogames.index");
     }
